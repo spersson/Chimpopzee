@@ -1,0 +1,42 @@
+<RCC>
+    <qresource prefix="/buttons">
+        <file alias="mainMenu">main-menu.png</file>
+        <file alias="nextLevel">next-level.png</file>
+        <file alias="pause">pause.png</file>
+        <file alias="quit">quit.png</file>
+        <file alias="restart">restart.png</file>
+        <file alias="resume">resume.png</file>
+        <file alias="startNew">start-new.png</file>
+        <file alias="about">about.png</file>
+    </qresource>
+    <qresource prefix="/bubbles">
+        <file alias="highlight">highlight.svg</file>
+        <file alias="monkey">monkey.svg</file>
+        <file alias="blued">blue-double.svg</file>
+        <file alias="blues">blue-single.svg</file>
+        <file alias="greend">green-double.svg</file>
+        <file alias="greens">green-single.svg</file>
+        <file alias="yellowd">yellow-double.svg</file>
+        <file alias="yellows">yellow-single.svg</file>
+        <file alias="purpled">purple-double.svg</file>
+        <file alias="purples">purple-single.svg</file>
+        <file alias="redd">red-double.svg</file>
+        <file alias="reds">red-single.svg</file>
+    </qresource>
+    <qresource prefix="/particles">
+        <file alias="blueStar">blue-star.png</file>
+        <file alias="redStar">red-star.png</file>
+        <file alias="yellowStar">yellow-star.png</file>
+        <file alias="splash1">splash-particle1.png</file>
+        <file alias="splash2">splash-particle2.png</file>
+    </qresource>
+    <qresource prefix="/sounds">
+        <file alias="plopp">plopp.wav</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="background">bg.png</file>
+        <file alias="twigLeft">twig-left.svg</file>
+        <file alias="twigRight">twig-right.svg</file>
+        <file alias="padlock">padlock.svg</file>
+    </qresource>
+</RCC>
