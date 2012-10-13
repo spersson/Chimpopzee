@@ -492,19 +492,18 @@ function clearAllBubbles() {
 }
 
 function createNewGameGrid(pMonkeyCount, pEmptyRows) {
-	function findAvailable() {
-		var r, c;
-		do {
-			r = Math.floor(Math.random()*(gGameGrid.height - pEmptyRows)) + pEmptyRows;
-			c = Math.floor(Math.random()*gGameGrid.width);
-		} while(gGameGrid.valueAt(r,c));
-		return {row: r, col:c}
+	var lPossibleRowCount = gameArea.gameRowCount - pEmptyRows;
+	var lDestinations = new Array(lPossibleRowCount * gameArea.gameColumnCount)
+	for(var r = 0; r < lPossibleRowCount; ++r) {
+		for(var c = 0; c < gameArea.gameColumnCount; ++c) {
+			lDestinations[r*gameArea.gameColumnCount + c] = {row: r + pEmptyRows, col: c};
+		}
 	}
 
 	gGameGrid = new Grid(gameArea.gameColumnCount, gameArea.gameRowCount);
 	for(var i = 0; i < pMonkeyCount; ++i) {
-		var lDest = findAvailable();
-		createNewBubble(lDest.row, lDest.col, true, true, 0, gColors[Math.floor(Math.random() * gLevels[game.level].colorCount)], true);
+		var lDest = lDestinations.splice(Math.floor(Math.random()*lDestinations.length), 1);
+		createNewBubble(lDest[0].row, lDest[0].col, true, true, 0, gColors[Math.floor(Math.random() * gLevels[game.level].colorCount)], true);
 	}
 	return true;
 }
