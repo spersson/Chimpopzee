@@ -305,7 +305,7 @@ function animateFallingBubbles() {
 	}
 
 	if(gameArea.state === "Double Falling") {
-		gFallingDouble.y += (gameArea.fallSpeed + gSpeedAddition)*lTimeDiff;
+		gFallingDouble.y += Math.min(gameArea.bubbleSize, (gameArea.fallSpeed + gSpeedAddition)*lTimeDiff);
 		gSpeedAddition /= 1.07;
 
 		if(gFallingDouble.y > 2*gameArea.bubbleSize && !gameArea.newDoubleReady && !gameArea.bringInClaws.running) {
@@ -348,7 +348,7 @@ function animateFallingBubbles() {
 		var lSomethingLanded = false;
 		for(i = 0; i < gFallingBubbles.length; ++i) {
 			lBubble = gFallingBubbles[i];
-			lBubble.y += gameArea.sequenceFallSpeed*lTimeDiff
+			lBubble.y += Math.min(gameArea.bubbleSize, gameArea.sequenceFallSpeed*lTimeDiff);
 
 			if(shouldStopFalling(lBubble.column, lBubble.y, lBubble.single, lBubble.bubbleRotation)) {
 				lBubble.state = "";
