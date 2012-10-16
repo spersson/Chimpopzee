@@ -16,7 +16,6 @@ QVariantMap createLevel(int pColumnCount, int pColorCount, int pMonkeyDensity, i
 	return lMap;
 }
 
-
 void createAllLevels(QVariantList &pLevels) {
 	pLevels << createLevel(6, 2, 8, 20, 53, 0.3);
 	pLevels << createLevel(6, 2, 9, 20, 51, 0.4);
@@ -60,23 +59,23 @@ void createAllLevels(QVariantList &pLevels) {
 	pLevels << createLevel(8, 4, 41, 12, 31, 1.0);
 	pLevels << createLevel(8, 4, 42, 12, 30, 1.05);
 
-	pLevels << createLevel(10, 4, 43, 12, 29, 1.1);
-	pLevels << createLevel(10, 4, 44, 11, 28, 1.1);
-	pLevels << createLevel(10, 4, 45, 11, 27, 1.15);
-	pLevels << createLevel(10, 4, 46, 10, 26, 1.15);
-	pLevels << createLevel(10, 4, 47, 10, 25, 1.2);
+	pLevels << createLevel(10, 4, 43, 12, 30, 1.1);
+	pLevels << createLevel(10, 4, 44, 12, 30, 1.1);
+	pLevels << createLevel(10, 4, 45, 12, 30, 1.15);
+	pLevels << createLevel(10, 4, 46, 11, 30, 1.15);
+	pLevels << createLevel(10, 4, 47, 10, 30, 1.2);
 
-	pLevels << createLevel(10, 5, 48, 15, 38, 0.9);
-	pLevels << createLevel(10, 5, 49, 14, 36, 0.9);
-	pLevels << createLevel(10, 5, 50, 14, 34, 0.95);
-	pLevels << createLevel(10, 5, 51, 13, 32, 1.0);
-	pLevels << createLevel(10, 5, 52, 13, 30, 1.05);
+	pLevels << createLevel(10, 5, 40, 15, 38, 0.8);
+	pLevels << createLevel(10, 5, 42, 14, 36, 0.8);
+	pLevels << createLevel(10, 5, 44, 14, 34, 0.9);
+	pLevels << createLevel(10, 5, 46, 13, 32, 0.9);
+	pLevels << createLevel(10, 5, 47, 13, 30, 1.0);
 
-	pLevels << createLevel(10, 5, 53, 12, 28, 1.1);
-	pLevels << createLevel(10, 5, 54, 12, 26, 1.1);
-	pLevels << createLevel(10, 5, 55, 11, 24, 1.15);
-	pLevels << createLevel(10, 5, 56, 11, 22, 1.15);
-	pLevels << createLevel(10, 5, 57, 10, 20, 1.2);
+	pLevels << createLevel(10, 5, 48, 12, 28, 1.0);
+	pLevels << createLevel(10, 5, 49, 12, 28, 1.0);
+	pLevels << createLevel(10, 5, 50, 11, 28, 1.0);
+	pLevels << createLevel(10, 5, 53, 11, 26, 1.1);
+	pLevels << createLevel(10, 5, 55, 10, 26, 1.2);
 }
 
 
