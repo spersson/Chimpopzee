@@ -14,7 +14,13 @@ Window {
 	property bool active: Qt.application.active
 	property int windowHeight: screen.rotation === 0 || screen.rotation === 180 ? screen.displayHeight : screen.displayWidth
 	property int windowWidth: screen.rotation === 0 || screen.rotation === 180 ? screen.displayWidth : screen.displayHeight
-	onActiveChanged: if(!active && state === "Running") { state = "Pause Menu"; }
+	onActiveChanged: {
+		if(active) {
+			screen.allowSwipe = true;
+		} else if(state === "Running") {
+			state = "Pause Menu";
+		}
+	}
 
 	Component.onCompleted: {
 		screen.allowedOrientations = Screen.Portrait | Screen.PortraitInverted;
@@ -24,10 +30,7 @@ Window {
 	states: [
 		State {
 			name: "Running"
-			PropertyChanges {
-				target: screen
-				allowSwipe: false
-			}
+			PropertyChanges { target: screen; allowSwipe: false }
 			StateChangeScript {
 				script: GameLogic.updateTimestamp();
 			}
