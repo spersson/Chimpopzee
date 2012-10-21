@@ -512,7 +512,9 @@ Window {
 			}
 
 			Text{
-				text:"Copyright Simon Persson 2012. Licensed under the GNU General Public License (GPL) version 2 or later."
+				text:"Copyright Simon Persson 2012. Licensed under the GNU General Public License (GPL) version 2 or later.\n" +
+				     "Chimp icon by Jakub Steiner.\n" +
+				     "Source code available at https://github.com/spersson/Chimpopzee"
 				width: parent.width
 				wrapMode: Text.Wrap
 				font.pixelSize: windowHeight/48
