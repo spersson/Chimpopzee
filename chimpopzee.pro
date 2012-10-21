@@ -3,6 +3,10 @@ folder_01.source = qml/chimpopzee
 folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
+conf_file_01.files = chimpopzee.conf
+conf_file_01.path = /usr/share/policy/etc/syspart.conf.d
+INSTALLS += conf_file_01
+
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
 
@@ -44,7 +48,8 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/copyright \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
-    qtc_packaging/debian_harmattan/changelog
+    qtc_packaging/debian_harmattan/changelog \
+    chimpopzee.conf
 
 RESOURCES += \
     resources/resources.qrc
