@@ -56,6 +56,7 @@ var gSpeedAddition = 0;
 var gDragSpeedX = 0;
 var gFilteredFingerX;
 var gCouldBeAClick;
+var gFingerDownTime;
 
 var gLastFallUpdate;
 var gLastMouseMoveTime;
@@ -79,6 +80,7 @@ function onMouseDown(mouseEvent) {
 	} else {
 		gBubbleDragStartX = (gameArea.gameColumnCount/2 - 1)*gameArea.bubbleSize;
 	}
+	gFingerDownTime = Date.now();
 }
 
 function onMouseMove(mouseEvent) {
@@ -142,7 +144,7 @@ function onMouseClick(mouseEvent) {
 		return gGameGrid.valueAt(Math.ceil(pY), pColumn) || (gGameGrid.valueAt(Math.floor(pY), pColumn) && pY - Math.floor(pY) < 0.75);
 	}
 
-	if(!gCouldBeAClick || gMouseDownBlockNr !== gBlockCounter || gameArea.state !== "Double Falling") {
+	if(!gCouldBeAClick || gMouseDownBlockNr !== gBlockCounter || gameArea.state !== "Double Falling" || Date.now() - gFingerDownTime > 500) {
 		return;
 	}
 	var lWantsCCW = false;
