@@ -515,7 +515,7 @@ Window {
 			spacing: windowHeight/16
 
 			Text{
-				text: "Chimpopzee"
+				text: "Chimpopzee v1.0"
 				width: parent.width
 				horizontalAlignment: Text.AlignHCenter
 				font.pixelSize: windowHeight/20
