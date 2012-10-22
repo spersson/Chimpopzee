@@ -23,6 +23,7 @@ import com.nokia.meego 1.1
 import QtMultimediaKit 1.1
 
 import "gamelogic.js" as GameLogic
+import "tutorial.js" as Tutorial
 
 Window {
 	id: game
@@ -83,6 +84,10 @@ Window {
 		State {
 			name: "About Menu"
 			AnchorChanges { target: aboutMenu; anchors.horizontalCenter: parent.horizontalCenter; anchors.right: undefined }
+		},
+		State {
+			name: "Tutorial"
+			AnchorChanges { target: tutorial; anchors.horizontalCenter: parent.horizontalCenter; anchors.right: undefined }
 		}
 	]
 	state: "Main Menu"
@@ -283,24 +288,29 @@ Window {
 			height: windowHeight/3; width: height
 			smooth: true
 			anchors {
-				margins: windowHeight/32
 				horizontalCenter: parent.horizontalCenter
 				top: parent.top
 			}
 		}
 		Column {
 			anchors {
-				margins: windowHeight/32
 				top: monkeyLogo.bottom
 				left: parent.left; right: parent.right
 			}
-			spacing: windowHeight/16
+			spacing: windowHeight/24
 			ImageButton {
 				source: "qrc:///buttons/startNew"
 				height: windowHeight/16
 				width: parent.width*15/16
 				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: { if(game.state === "Main Menu") game.state = "Main Level Menu"; else game.state = "Pause Level Menu" }
+			}
+			ImageButton {
+				source: "qrc:///buttons/tutorial"
+				height: windowHeight/16
+				width: parent.width*15/16
+				anchors.horizontalCenter: parent.horizontalCenter
+				onClicked: { tutorial.pageNumber = 1; game.state = "Tutorial" }
 			}
 			ImageButton {
 				source: "qrc:///buttons/about"
@@ -530,4 +540,73 @@ Window {
 		}
 	}
 
+	MenuCard {
+		id: tutorial
+		property int pageNumber: 1
+		anchors {right: parent.left; verticalCenter: parent.verticalCenter}
+
+		Column {
+			anchors {
+				margins: windowHeight/32
+				top: parent.top
+				left: parent.left; right: parent.right
+			}
+			spacing: windowHeight/48
+
+			Image {
+				source: Tutorial.images[tutorial.pageNumber - 1]
+				anchors.horizontalCenter: parent.horizontalCenter
+				height: windowHeight/2.5
+				width: height*sourceSize.width/sourceSize.height
+			}
+
+			Text{
+				text: Tutorial.texts[tutorial.pageNumber - 1]
+				width: parent.width
+				wrapMode: Text.Wrap
+				font.pixelSize: windowHeight/48
+			}
+		}
+
+		Column {
+			anchors {
+				margins: windowHeight/48
+				bottom: parent.bottom
+				left: parent.left; right: parent.right
+			}
+			spacing: windowHeight/48
+
+			Row {
+				anchors.horizontalCenter: parent.horizontalCenter
+				ImageButton {
+					source: "qrc:///buttons/previous"
+					opacity: tutorial.pageNumber != 1 ? 1 : 0.2
+					height: windowHeight/16
+					onClicked: if(tutorial.pageNumber > 1) tutorial.pageNumber--;
+				}
+
+				Text {
+					text: tutorial.pageNumber + "/" + Tutorial.texts.length
+					anchors.verticalCenter: parent.verticalCenter
+					verticalAlignment: Text.AlignVCenter
+					font.pixelSize: windowHeight/32
+				}
+
+				ImageButton {
+					source: "qrc:///buttons/next"
+					opacity: tutorial.pageNumber != Tutorial.texts.length ? 1 : 0.2
+					height: windowHeight/16
+					onClicked: if(tutorial.pageNumber < Tutorial.texts.length) tutorial.pageNumber++;
+				}
+			}
+
+			ImageButton {
+				source: "qrc:///buttons/mainMenu"
+				anchors.horizontalCenter: parent.horizontalCenter
+				height: windowHeight/16
+				width: parent.width*15/16
+				onClicked: { game.state = "Main Menu" }
+			}
+		}
+	}
 }

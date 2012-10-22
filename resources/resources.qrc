@@ -8,6 +8,9 @@
         <file alias="resume">resume.png</file>
         <file alias="startNew">start-new.png</file>
         <file alias="about">about.png</file>
+        <file alias="next">next.png</file>
+        <file alias="tutorial">tutorial.png</file>
+        <file alias="previous">previous.png</file>
     </qresource>
     <qresource prefix="/bubbles">
         <file alias="highlight">highlight.svg</file>
@@ -38,5 +41,12 @@
         <file alias="twigLeft">twig-left.svg</file>
         <file alias="twigRight">twig-right.svg</file>
         <file alias="padlock">padlock.svg</file>
+    </qresource>
+    <qresource prefix="/tutorial">
+        <file alias="drag">drag.png</file>
+        <file alias="fourinarow">fourinarow.png</file>
+        <file alias="rotate">rotate.png</file>
+        <file alias="rotateIn">rotate_in.png</file>
+        <file alias="slide">slide.png</file>
     </qresource>
 </RCC>
