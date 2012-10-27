@@ -114,7 +114,7 @@ Window {
 	}
 
 	Text {
-		visible: game.state !== "Main Menu" && game.state !== "Main Level Menu"
+		visible: game.state !== "Main Menu" && game.state !== "Main Level Menu" && game.state !== "Tutorial" && game.state !== "About Menu"
 		color: "#f9eec3"
 		opacity: 0.2
 		text: "Level " + (game.level + 1)
