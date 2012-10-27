@@ -144,7 +144,7 @@ function onMouseClick(mouseEvent) {
 		return gGameGrid.valueAt(Math.ceil(pY), pColumn) || (gGameGrid.valueAt(Math.floor(pY), pColumn) && pY - Math.floor(pY) < 0.75);
 	}
 
-	if(!gCouldBeAClick || gMouseDownBlockNr !== gBlockCounter || gameArea.state !== "Double Falling" || Date.now() - gFingerDownTime > 500) {
+	if(!gCouldBeAClick || gMouseDownBlockNr !== gBlockCounter || gameArea.state !== "Double Falling" || Date.now() - gFingerDownTime > 350) {
 		return;
 	}
 	var lWantsCCW = false;
