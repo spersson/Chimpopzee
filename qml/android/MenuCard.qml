@@ -18,38 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef LEVELMODEL_H
-#define LEVELMODEL_H
+import QtQuick 2.0
 
-#include <QAbstractListModel>
-
-class QSettings;
-
-class LevelModel : public QAbstractListModel
-{
-	Q_OBJECT
-public:
-	enum LevelRoles {
-		TimeRole = Qt::UserRole + 1,
-		LockedRole
-	};
-
-	explicit LevelModel(int pNumLevels, QObject *pParent = 0);
-
-	virtual int rowCount(const QModelIndex &pParent) const;
-	virtual QVariant data(const QModelIndex &pIndex, int pRole) const;
-	virtual QHash<int, QByteArray> roleNames() const;
-	Q_INVOKABLE int unlockedCount();
-
-public slots:
-	void unlock(int pLevel);
-	bool recordHighscore(int pLevel, int pRemainingTime);
-
-private:
-	int mNumLevels;
-	QSettings *mSettings;
-};
-
-void createAllLevels(QVariantList &pLevels);
-
-#endif // LEVELMODEL_H
+Rectangle {
+	width: windowWidth*7/8
+	height: windowHeight*3/4
+	radius: height/12
+	border.width: 4
+	border.color: "#534333"
+	color: "#f9eec3"
+	anchors {
+		margins: 4
+		verticalCenter: parent.verticalCenter
+	}
+}

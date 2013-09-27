@@ -1,43 +1,28 @@
-# Add more folders to ship with the application, here
-folder_01.source = qml/chimpopzee
-folder_01.target = qml
-DEPLOYMENTFOLDERS = folder_01
 
-conf_file_01.files = chimpopzee.conf
-conf_file_01.path = /usr/share/policy/etc/syspart.conf.d
-INSTALLS += conf_file_01
+SOURCES += \
+    levelmodel.cpp
 
-# Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH =
+HEADERS += \
+    levelmodel.h
 
-symbian:TARGET.UID3 = 0xE5C8E6D8
+RESOURCES += \
+    resources/resources.qrc
 
-# Smart Installer package's UID
-# This UID is from the protected range and therefore the package will
-# fail to install if self-signed. By default qmake uses the unprotected
-# range value if unprotected UID is defined for the application and
-# 0x2002CCCF value if protected UID is given to the application
-#symbian:DEPLOYMENT.installer_header = 0x2002CCCF
+!isEmpty(MEEGO_VERSION_MAJOR){
 
-# Allow network access on Symbian
-#symbian:TARGET.CAPABILITY += NetworkServices
-
-# If your application uses the Qt Mobility libraries, uncomment the following
-# lines and add the respective components to the MOBILITY variable.
- CONFIG += mobility
- MOBILITY += QtMultimedia
-
+SOURCES += main-meego.cpp
 # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
 CONFIG += qdeclarative-boostable
 
-# Add dependency to Symbian components
-# CONFIG += qt-components
+# If your application uses the Qt Mobility libraries, uncomment the following
+# lines and add the respective components to the MOBILITY variable.
+CONFIG += mobility
+MOBILITY += QtMultimedia
 
-# The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp \
-    levelmodel.cpp
+folder_01.source = qml/meego
+folder_01.target = qml
+DEPLOYMENTFOLDERS += folder_01
 
-# Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
@@ -50,10 +35,86 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/compat \
     qtc_packaging/debian_harmattan/changelog \
     chimpopzee.conf \
-    qml/chimpopzee/tutorial.js
+    qml/meego/gamelogic.js \
+    qml/meego/main.qml \
+    qml/meego/MenuCard.qml \
+    qml/meego/doublelogic.js \
+    qml/meego/ImageButton.qml \
+    qml/meego/tutorial.js \
+    qml/meego/Bubble.qml \
+    qml/meego/DoubleBubble.qml \
+    qml/meego/LevelButton.qml \
 
-RESOURCES += \
-    resources/resources.qrc
 
-HEADERS += \
-    levelmodel.h
+conf_file_01.files = chimpopzee.conf
+conf_file_01.path = /usr/share/policy/etc/syspart.conf.d
+INSTALLS += conf_file_01
+
+} else:android {
+
+SOURCES += main-android.cpp
+
+folder_01.source = qml/android
+folder_01.target = qml
+DEPLOYMENTFOLDERS += folder_01
+
+include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
+qtcAddDeployment()
+
+QT += multimedia xml svg
+
+OTHER_FILES += \
+    android/src/org/qtproject/qt5/android/bindings/QtActivity.java \
+    android/src/org/qtproject/qt5/android/bindings/QtApplication.java \
+    android/src/org/kde/necessitas/ministro/IMinistro.aidl \
+    android/src/org/kde/necessitas/ministro/IMinistroCallback.aidl \
+    android/AndroidManifest.xml \
+    android/res/values/libs.xml \
+    android/res/values/strings.xml \
+    android/res/layout/splash.xml \
+    android/res/values-et/strings.xml \
+    android/res/values-zh-rCN/strings.xml \
+    android/res/values-zh-rTW/strings.xml \
+    android/res/values-es/strings.xml \
+    android/res/values-nb/strings.xml \
+    android/res/values-ms/strings.xml \
+    android/res/values-it/strings.xml \
+    android/res/values-pl/strings.xml \
+    android/res/values-id/strings.xml \
+    android/res/values-pt-rBR/strings.xml \
+    android/res/values-rs/strings.xml \
+    android/res/values-fr/strings.xml \
+    android/res/values-ro/strings.xml \
+    android/res/values-nl/strings.xml \
+    android/res/values-de/strings.xml \
+    android/res/values-ja/strings.xml \
+    android/res/values-ru/strings.xml \
+    android/res/values-fa/strings.xml \
+    android/res/values-el/strings.xml \
+    android/version.xml \
+    qml/android/tutorial.js \
+    qml/android/DoubleBubble.qml \
+    qml/android/ImageButton.qml \
+    qml/android/LevelButton.qml \
+    qml/android/MenuCard.qml \
+    qml/android/doublelogic.js \
+    qml/android/Game.qml \
+    qml/android/Bubble.qml \
+    qml/android/gamelogic.js \
+
+
+} else {
+SOURCES += main-android.cpp
+
+folder_01.source = qml/android
+folder_01.target = qml
+DEPLOYMENTFOLDERS += folder_01
+
+include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
+qtcAddDeployment()
+
+
+QT += xml svg multimedia
+
+}
+

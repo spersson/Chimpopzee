@@ -18,38 +18,26 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef LEVELMODEL_H
-#define LEVELMODEL_H
+#include <QtCore/QVariant>
+#include <QtGui/QGuiApplication>
+#include <QtQml/QQmlContext>
 
-#include <QAbstractListModel>
+#include "qtquick2applicationviewer.h"
+#include "levelmodel.h"
 
-class QSettings;
+Q_DECL_EXPORT int main(int argc, char *argv[]) {
+	QGuiApplication app(argc, argv);
 
-class LevelModel : public QAbstractListModel
-{
-	Q_OBJECT
-public:
-	enum LevelRoles {
-		TimeRole = Qt::UserRole + 1,
-		LockedRole
-	};
+	QtQuick2ApplicationViewer viewer;
 
-	explicit LevelModel(int pNumLevels, QObject *pParent = 0);
+	QVariantList lLevelList;
+	createAllLevels(lLevelList);
+	viewer.rootContext()->setContextProperty(QStringLiteral("gLevels"), lLevelList);
+	LevelModel *lLevelModel = new LevelModel(lLevelList.count());
+	viewer.rootContext()->setContextProperty(QStringLiteral("gLevelModel"), lLevelModel);
 
-	virtual int rowCount(const QModelIndex &pParent) const;
-	virtual QVariant data(const QModelIndex &pIndex, int pRole) const;
-	virtual QHash<int, QByteArray> roleNames() const;
-	Q_INVOKABLE int unlockedCount();
+	viewer.setMainQmlFile(QStringLiteral("qml/android/Game.qml"));
+	viewer.show();
 
-public slots:
-	void unlock(int pLevel);
-	bool recordHighscore(int pLevel, int pRemainingTime);
-
-private:
-	int mNumLevels;
-	QSettings *mSettings;
-};
-
-void createAllLevels(QVariantList &pLevels);
-
-#endif // LEVELMODEL_H
+	return app.exec();
+}

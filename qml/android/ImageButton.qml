@@ -18,38 +18,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef LEVELMODEL_H
-#define LEVELMODEL_H
+import QtQuick 2.0
 
-#include <QAbstractListModel>
+Item {
+	id: imageButton
+	signal clicked
+	property alias source: image.source
 
-class QSettings;
+	height: 50
+	// width set to preserve aspect ratio
+	width: height*image.sourceSize.width/image.sourceSize.height
+	scale: mouseArea.pressed ? 0.9 : 1.0
+	Behavior on scale { NumberAnimation { duration: 50 } }
 
-class LevelModel : public QAbstractListModel
-{
-	Q_OBJECT
-public:
-	enum LevelRoles {
-		TimeRole = Qt::UserRole + 1,
-		LockedRole
-	};
+	MouseArea {
+		id: mouseArea
+		anchors.fill: imageButton
+		onClicked: imageButton.clicked()
+	}
 
-	explicit LevelModel(int pNumLevels, QObject *pParent = 0);
-
-	virtual int rowCount(const QModelIndex &pParent) const;
-	virtual QVariant data(const QModelIndex &pIndex, int pRole) const;
-	virtual QHash<int, QByteArray> roleNames() const;
-	Q_INVOKABLE int unlockedCount();
-
-public slots:
-	void unlock(int pLevel);
-	bool recordHighscore(int pLevel, int pRemainingTime);
-
-private:
-	int mNumLevels;
-	QSettings *mSettings;
-};
-
-void createAllLevels(QVariantList &pLevels);
-
-#endif // LEVELMODEL_H
+	Image {
+		id: image
+		height: imageButton.height
+		// width set to preserve aspect ratio
+		width: height*sourceSize.width/sourceSize.height
+		anchors.centerIn: parent
+		smooth: true
+	}
+}

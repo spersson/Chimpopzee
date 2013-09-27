@@ -18,38 +18,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef LEVELMODEL_H
-#define LEVELMODEL_H
+#include <QtCore/QVariant>
+#include <QtGui/QApplication>
+#include <QtDeclarative>
 
-#include <QAbstractListModel>
+#include "qmlapplicationviewer.h"
+#include "levelmodel.h"
 
-class QSettings;
+Q_DECL_EXPORT int main(int argc, char *argv[]) {
+	QScopedPointer<QApplication> app(createApplication(argc, argv));
+	QScopedPointer<QmlApplicationViewer> viewer(QmlApplicationViewer::create());
 
-class LevelModel : public QAbstractListModel
-{
-	Q_OBJECT
-public:
-	enum LevelRoles {
-		TimeRole = Qt::UserRole + 1,
-		LockedRole
-	};
+	QVariantList lLevelList;
+	createAllLevels(lLevelList);
+	viewer->rootContext()->setContextProperty(QLatin1String("gLevels"), lLevelList);
 
-	explicit LevelModel(int pNumLevels, QObject *pParent = 0);
+	LevelModel *lLevelModel = new LevelModel(lLevelList.count());
+	viewer->rootContext()->setContextProperty(QLatin1String("gLevelModel"), lLevelModel);
+	viewer->setMainQmlFile(QLatin1String("qml/meego/main.qml"));
+	viewer->showExpanded();
 
-	virtual int rowCount(const QModelIndex &pParent) const;
-	virtual QVariant data(const QModelIndex &pIndex, int pRole) const;
-	virtual QHash<int, QByteArray> roleNames() const;
-	Q_INVOKABLE int unlockedCount();
-
-public slots:
-	void unlock(int pLevel);
-	bool recordHighscore(int pLevel, int pRemainingTime);
-
-private:
-	int mNumLevels;
-	QSettings *mSettings;
-};
-
-void createAllLevels(QVariantList &pLevels);
-
-#endif // LEVELMODEL_H
+	return app->exec();
+}
