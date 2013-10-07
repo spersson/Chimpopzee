@@ -95,12 +95,12 @@ function onMouseMove(mouseEvent) {
 		return;
 	}
 
-	if(Math.abs(mouseEvent.x - gDragStartX) > gameArea.thresholdSize) {
+	if(Math.abs(mouseEvent.x - gDragStartX) > game.thresholdSize) {
 		gCouldBeAClick = false;
 		gFallingDouble.state = "Dragging";
 	}
 
-	if(Math.abs(mouseEvent.y - gDragStartY) > gameArea.thresholdSize) {
+	if(Math.abs(mouseEvent.y - gDragStartY) > game.thresholdSize) {
 		gCouldBeAClick = false;
 	}
 
@@ -432,6 +432,7 @@ function onDoubleLanding() {
 	                false, false, (gFallingDouble.angle + 180) % 360,
 	                gFallingDouble.rightBubble.color, false);
 	killKillKill(gFallingDouble);
+	gFallingDouble = null;
 	gBlockCounter++;
 	checksAfterLanding();
 }
@@ -497,13 +498,20 @@ function createNewFallingDouble() {
 }
 
 function clearAllBubbles() {
-	killKillKill(gNextFallingDouble);
-	killKillKill(gFallingDouble);
+	if(gNextFallingDouble !== null) {
+		killKillKill(gNextFallingDouble);
+		gNextFallingDouble = null;
+	}
+	if(gFallingDouble !== null) {
+		killKillKill(gFallingDouble);
+		gFallingDouble = null;
+	}
 
 	if(gGameGrid) {
 		for(var r = 0; r < gGameGrid.height; ++r) {
 			for(var c = 0; c < gGameGrid.width; ++c) {
 				killKillKill(gGameGrid.valueAt(r,c));
+				gGameGrid.setValueAt(r, c, null);
 			}
 		}
 	}
@@ -564,6 +572,9 @@ function decreaseRemainingTime() {
 function checkForQuads() {
 	function popBubble(pRow, pColumn) {
 		var lBubble = gGameGrid.valueAt(pRow, pColumn);
+		if(lBubble.state === "Popping") {
+			return;
+		}
 		lBubble.state = "Popping";
 		if(!lBubble.single) {
 			var lOtherBubble;

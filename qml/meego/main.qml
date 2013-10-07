@@ -35,6 +35,7 @@ Window {
 	property bool active: Qt.application.active
 	property int windowHeight: screen.rotation === 0 || screen.rotation === 180 ? screen.displayHeight : screen.displayWidth
 	property int windowWidth: screen.rotation === 0 || screen.rotation === 180 ? screen.displayWidth : screen.displayHeight
+	property int thresholdSize: 0.06*screen.dpi
 	onActiveChanged: {
 		if(active) {
 			screen.allowSwipe = true;
@@ -191,7 +192,6 @@ Window {
 		id: gameArea
 		property int gameColumnCount: 8
 		property int bubbleSize: Math.floor(parent.width/gameColumnCount)
-		property int thresholdSize: 0.06*screen.dpi
 		property int gameRowCount: Math.ceil((windowHeight - bottomBar.height - bottomBar.border.width)/bubbleSize)
 		property real fallSpeed: gLevels[game.level].fallSpeed*bubbleSize/1000
 		property real sequenceFallSpeed: 4*bubbleSize/1000

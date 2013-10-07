@@ -572,6 +572,9 @@ function decreaseRemainingTime() {
 function checkForQuads() {
 	function popBubble(pRow, pColumn) {
 		var lBubble = gGameGrid.valueAt(pRow, pColumn);
+		if(lBubble.state === "Popping") {
+			return;
+		}
 		lBubble.state = "Popping";
 		if(!lBubble.single) {
 			var lOtherBubble;
