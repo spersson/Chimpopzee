@@ -20,9 +20,45 @@
 
 #include "levelmodel.h"
 
+#include <QtCore/QBuffer>
+#include <QtCore/QDataStream>
+#include <QtCore/QFileInfo>
 #include <QtCore/QSettings>
 
+
 #define UNLOCKED_AT_START 9
+
+bool readComplicatedFile(QIODevice &pDevice, QSettings::SettingsMap &pMap) {
+	QBuffer lBuffer;
+	lBuffer.open(QIODevice::ReadWrite);
+	char lByte;
+	while(pDevice.getChar(&lByte)) {
+		lBuffer.putChar(lByte ^ 85);
+	}
+	lBuffer.seek(0);
+	QDataStream lDataStream(&lBuffer);
+	quint32 lVersion;
+	lDataStream >> lVersion;
+	lDataStream.setVersion(QDataStream::Qt_4_6);
+	lDataStream >> pMap;
+	return true;
+}
+
+bool writeComplicatedFile(QIODevice &pDevice, const QSettings::SettingsMap &pMap) {
+	QBuffer lBuffer;
+	lBuffer.open(QIODevice::ReadWrite);
+	QDataStream lDataStream(&lBuffer);
+	lDataStream.setVersion(QDataStream::Qt_4_6);
+	lDataStream << (quint32) 1;
+	lDataStream << pMap;
+	lBuffer.seek(0);
+	char lByte;
+	while(lBuffer.getChar(&lByte)) {
+		pDevice.putChar(lByte ^ 85);
+	}
+	return true;
+}
+
 
 LevelModel::LevelModel(int pNumLevels, QObject *pParent) :
    QAbstractListModel(pParent), mNumLevels(pNumLevels)
@@ -30,7 +66,26 @@ LevelModel::LevelModel(int pNumLevels, QObject *pParent) :
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
 	setRoleNames(roleNames());
 #endif
-	mSettings = new QSettings(QLatin1String("Simon Persson"), QLatin1String("Chimpachump"), this);
+	const QSettings::Format ComplicatedFormat = QSettings::registerFormat("compl", readComplicatedFile, writeComplicatedFile);
+	mSettings = new QSettings(ComplicatedFormat, QSettings::UserScope, QLatin1String("Simon Persson"),
+	                          QLatin1String("Chimpopzee"), this);
+	QSettings *lSettings = new QSettings(QLatin1String("Simon Persson"), QLatin1String("Chimpachump"));
+	QFileInfo lOldIniFile(lSettings->fileName());
+	if(lOldIniFile.exists()) {
+		mSettings->setValue(QLatin1String("unlockedLevels"), lSettings->value(QLatin1String("unlockedLevels")).toInt());
+		mSettings->beginGroup("bestTimes");
+		lSettings->beginGroup("bestTimes");
+		int lIndex = 0;
+		int lBestTime = lSettings->value(QString::number(lIndex), -1).toInt();
+		while(lBestTime > -1) {
+			mSettings->setValue(QString::number(lIndex++), lBestTime);
+			lBestTime = lSettings->value(QString::number(lIndex), -1).toInt();
+		}
+		mSettings->endGroup();
+		QFile::remove(lOldIniFile.absoluteFilePath());
+		mSettings->sync();
+	}
+	delete lSettings;
 }
 
 int LevelModel::rowCount(const QModelIndex &pParent) const {
@@ -63,6 +118,7 @@ int LevelModel::unlockedCount() {
 void LevelModel::unlock(int pLevel) {
 	if(pLevel > mSettings->value(QLatin1String("unlockedLevels"), UNLOCKED_AT_START).toInt()) {
 		mSettings->setValue(QLatin1String("unlockedLevels"), pLevel);
+		mSettings->sync();
 		emit dataChanged(index(pLevel), index(pLevel));
 	}
 }
@@ -71,6 +127,7 @@ bool LevelModel::recordHighscore(int pLevel, int pRemainingTime) {
 	QString lKey = QString("bestTimes/%1").arg(pLevel);
 	if(mSettings->value(lKey, -1).toInt() < pRemainingTime) {
 		mSettings->setValue(lKey, pRemainingTime);
+		mSettings->sync();
 		emit dataChanged(index(pLevel), index(pLevel));
 		return true;
 	} else {
