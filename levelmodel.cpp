@@ -25,7 +25,6 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QSettings>
 
-
 #define UNLOCKED_AT_START 9
 
 bool readComplicatedFile(QIODevice &pDevice, QSettings::SettingsMap &pMap) {
@@ -72,14 +71,18 @@ LevelModel::LevelModel(int pNumLevels, QObject *pParent) :
 	QSettings *lSettings = new QSettings(QLatin1String("Simon Persson"), QLatin1String("Chimpachump"));
 	QFileInfo lOldIniFile(lSettings->fileName());
 	if(lOldIniFile.exists()) {
-		mSettings->setValue(QLatin1String("unlockedLevels"), lSettings->value(QLatin1String("unlockedLevels")).toInt());
+		int lUnlockedCount = lSettings->value(QLatin1String("unlockedLevels")).toInt();
+		// version 1.0 did not unlock next level after last level, when levels are added in a later
+		// version, first new level is not immideately unlocked even if all previous levels have been passed.
+		if(lSettings->value(QString("bestTimes/%1").arg(lUnlockedCount), -1).toInt() > -1) {
+			lUnlockedCount++;
+		}
+		mSettings->setValue(QLatin1String("unlockedLevels"), lUnlockedCount);
 		mSettings->beginGroup("bestTimes");
 		lSettings->beginGroup("bestTimes");
-		int lIndex = 0;
-		int lBestTime = lSettings->value(QString::number(lIndex), -1).toInt();
-		while(lBestTime > -1) {
-			mSettings->setValue(QString::number(lIndex++), lBestTime);
-			lBestTime = lSettings->value(QString::number(lIndex), -1).toInt();
+		for(int i = 0; i < lUnlockedCount; ++i) {
+			QString lIndex = QString::number(i);
+			mSettings->setValue(lIndex, lSettings->value(lIndex, -1).toInt());
 		}
 		mSettings->endGroup();
 		QFile::remove(lOldIniFile.absoluteFilePath());
