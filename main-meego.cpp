@@ -35,7 +35,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
 	LevelModel *lLevelModel = new LevelModel(lLevelList.count());
 	viewer->rootContext()->setContextProperty(QLatin1String("gLevelModel"), lLevelModel);
-	viewer->setMainQmlFile(QLatin1String("qml/meego/main.qml"));
+	viewer->setMainQmlFile(QLatin1String("qml/meego/Game.qml"));
 	viewer->showExpanded();
 
 	return app->exec();

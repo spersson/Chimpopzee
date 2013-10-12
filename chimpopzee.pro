@@ -36,7 +36,7 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/changelog \
     chimpopzee.conf \
     qml/meego/gamelogic.js \
-    qml/meego/main.qml \
+    qml/meego/Game.qml \
     qml/meego/MenuCard.qml \
     qml/meego/doublelogic.js \
     qml/meego/ImageButton.qml \

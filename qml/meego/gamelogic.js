@@ -148,7 +148,7 @@ function onMouseClick(mouseEvent) {
 		return;
 	}
 	var lWantsCCW = false;
-	if(mouseEvent.x < gameArea.width/2) {
+	if(mouseEvent.x < tapAndDragArea.width/2) {
 		lWantsCCW = true;
 	}
 
@@ -375,7 +375,7 @@ function animateFallingBubbles() {
 			if(shouldStopFalling(lBubble.column, lBubble.y, lBubble.single, lBubble.bubbleRotation)) {
 				lBubble.state = "";
 				lBubble.row = Math.floor(lBubble.y/gameArea.bubbleSize);
-				lBubble.y = gameArea.bubbleSize*lBubble.row;
+				lBubble.y = function(){return gameArea.bubbleSize*lBubble.row};
 				gGameGrid.setValueAt(lBubble.row, lBubble.column, lBubble)
 				gFallingBubbles.splice(i, 1);
 				i--;
@@ -453,9 +453,7 @@ function createNewBubble(pRow, pColumn, pSingle, pHasMonkey, pRotation, pColor, 
 	}
 	var properties = {
 		"row": pRow,
-		"y": pRow*gameArea.bubbleSize,
 		"column": pColumn,
-		"x": pColumn*gameArea.bubbleSize,
 		"hasMonkey": pHasMonkey,
 		"bubbleRotation": pRotation,
 		"color": pColor,
@@ -539,13 +537,19 @@ function createNewGameGrid(pMonkeyCount, pEmptyRows) {
 }
 
 function startNewGame(pLevel) {
+// ensure that there's some empty space at the top of game area.
 	var lEmptyRows = 5;
+// if screen is too wide we could get very few game rows... don't allow that
+	var lMinimumRows = 10;
 
 	clearAllBubbles();
 	game.level = pLevel;
 	gBlockCounter = 0;
 
 	gameArea.gameColumnCount = gLevels[game.level].columnCount;
+	var lDesiredBubbleSize = Math.floor(windowWidth/gameArea.gameColumnCount) // desired to make the bubbles fill entire screen width
+	var lAvailableHeight = game.windowHeight - bottomBar.height - bottomBar.border.width;
+	gameArea.gameRowCount = Math.max(lMinimumRows, Math.ceil(lAvailableHeight/lDesiredBubbleSize))
 	var lMonkeyCount = Math.round(gameArea.gameColumnCount*(gameArea.gameRowCount - lEmptyRows)*gLevels[game.level].monkeyDensity/100.0);
 	createNewGameGrid(lMonkeyCount, lEmptyRows);
 	game.remainingMonkeys = lMonkeyCount;

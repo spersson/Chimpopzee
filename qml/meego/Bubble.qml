@@ -36,6 +36,8 @@ Item {
 	property alias monkeyFlightY: _monkeyFlightY
 	property alias timeBarExtension: _timeBarExtension
 
+	x: column*gameArea.bubbleSize
+	y: row*gameArea.bubbleSize
 	width: gameArea.bubbleSize
 	height: gameArea.bubbleSize
 

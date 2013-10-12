@@ -32,10 +32,10 @@ Window {
 	property int remainingTime
 	property int visibleRemainingTime
 	property int timeInFlight: 0
-	property bool active: Qt.application.active
 	property int windowHeight: screen.rotation === 0 || screen.rotation === 180 ? screen.displayHeight : screen.displayWidth
 	property int windowWidth: screen.rotation === 0 || screen.rotation === 180 ? screen.displayWidth : screen.displayHeight
 	property int thresholdSize: 0.06*screen.dpi
+	property bool active: Qt.application.active
 	onActiveChanged: {
 		if(active) {
 			screen.allowSwipe = true;
@@ -46,7 +46,6 @@ Window {
 
 	Component.onCompleted: {
 		screen.allowedOrientations = Screen.Portrait | Screen.PortraitInverted;
-		levelView.positionViewAtIndex(gLevelModel.unlockedCount(), GridView.End);
 	}
 
 	states: [
@@ -111,7 +110,12 @@ Window {
 	Image {
 		source: "qrc:///images/background"
 		fillMode: Image.Tile
-		anchors.fill: parent
+		anchors {
+			top: parent.top
+			bottom: parent.bottom
+			left: gameArea.left
+			right: gameArea.right
+		}
 	}
 
 	Text {
@@ -128,21 +132,34 @@ Window {
 		rotation: -90
 	}
 
+	MouseArea {
+		id: tapAndDragArea
+		anchors.fill: parent
+		enabled: game.state === "Running"
+		onPressed: GameLogic.onMouseDown(mouse)
+		onPositionChanged: GameLogic.onMouseMove(mouse)
+		onReleased: GameLogic.onMouseRelease(mouse)
+		onClicked: GameLogic.onMouseClick(mouse)
+	}
+
 	Rectangle {
 		id: bottomBar
-		height: windowHeight/16; width: parent.width
+		height: windowHeight/16; width: gameArea.width
 		radius: height/6
 		anchors {
 			margins: border.width/2
 			top: parent.bottom
+			left: gameArea.left
 		}
 
 		ImageButton {
 			id: pauseButton
 			source: "qrc:///buttons/pause";
 			height: bottomBar.height
+			width: naturalWidth
 			anchors {
 				left: parent.left
+				horizontalCenter: undefined
 				verticalCenter: parent.verticalCenter
 			}
 			onClicked: if(game.state === "Running") game.state = "Pause Menu";
@@ -162,10 +179,10 @@ Window {
 			}
 
 			SequentialAnimation {
-				ColorAnimation {target: timeBarBackground; property: "color"; duration: 250; to: "red"}
-				ColorAnimation {target: timeBarBackground; property: "color"; duration: 150; to: "#f9eec3"}
-				ColorAnimation {target: timeBarBackground; property: "color"; duration: 250; to: "red"}
-				ColorAnimation {target: timeBarBackground; property: "color"; duration: 150; to: "#f9eec3"}
+				ColorAnimation {target: timeBarBackground; property: "color"; duration: 100; to: "red"}
+				ColorAnimation {target: timeBarBackground; property: "color"; duration: 200; to: "#f9eec3"}
+				ColorAnimation {target: timeBarBackground; property: "color"; duration: 100; to: "red"}
+				ColorAnimation {target: timeBarBackground; property: "color"; duration: 200; to: "#f9eec3"}
 				PauseAnimation {duration: 400}
 				loops: Animation.Infinite
 				alwaysRunToEnd: true
@@ -190,9 +207,11 @@ Window {
 
 	Item {
 		id: gameArea
+		property int gameRowCount: 8
 		property int gameColumnCount: 8
-		property int bubbleSize: Math.floor(parent.width/gameColumnCount)
-		property int gameRowCount: Math.ceil((windowHeight - bottomBar.height - bottomBar.border.width)/bubbleSize)
+		property int bubbleSize: Math.min(Math.floor(windowWidth/gameColumnCount),
+		                                  Math.floor(windowHeight/gameRowCount))
+
 		property real fallSpeed: gLevels[game.level].fallSpeed*bubbleSize/1000
 		property real sequenceFallSpeed: 4*bubbleSize/1000
 		property bool newDoubleReady: false
@@ -205,19 +224,10 @@ Window {
 		y: windowHeight - bottomBar.height - bottomBar.border.width - height
 		anchors.horizontalCenter: parent.horizontalCenter
 
-		MouseArea {
-			anchors.fill: parent
-			enabled: game.state === "Running"
-			onPressed: GameLogic.onMouseDown(mouse)
-			onMousePositionChanged: GameLogic.onMouseMove(mouse)
-			onReleased: GameLogic.onMouseRelease(mouse)
-			onClicked: GameLogic.onMouseClick(mouse)
-		}
-
 		Image {
 			id: leftClaw
 			source: "qrc:///images/twigLeft"
-			x: -gameArea.x - width; y: gameArea.bubbleSize
+			x: -width; y: gameArea.bubbleSize
 			width: height*sourceSize.width/sourceSize.height; height: gameArea.bubbleSize
 			smooth: true
 		}
@@ -225,7 +235,7 @@ Window {
 		Image {
 			id: rightClaw
 			source: "qrc:///images/twigRight"
-			x:	gameArea.x + gameArea.width; y: gameArea.bubbleSize
+			x:	gameArea.width; y: gameArea.bubbleSize
 			width: height*sourceSize.width/sourceSize.height; height: gameArea.bubbleSize
 			smooth: true
 		}
@@ -242,13 +252,13 @@ Window {
 			ParallelAnimation {
 				NumberAnimation {
 					target: leftClaw; property: "x"
-					from: -gameArea.x - leftClaw.width
+					from: -leftClaw.width
 					to: gameArea.bubbleSize*gameArea.gameColumnCount/2 - leftClaw.width
 					duration: 1000; easing.type: Easing.InOutQuad
 				}
 				NumberAnimation {
 					target: rightClaw; property: "x"
-					from: gameArea.x + gameArea.width
+					from: gameArea.width
 					to: gameArea.bubbleSize*gameArea.gameColumnCount/2
 					duration: 1000; easing.type: Easing.InOutQuad
 				}
@@ -269,19 +279,39 @@ Window {
 		ParallelAnimation {
 			id: _bringOutClaws
 			NumberAnimation {
-				target: leftClaw; property: "x"; to: -gameArea.x - leftClaw.width
+				target: leftClaw; property: "x"; to: -leftClaw.width
 				duration: 1000; easing.type: Easing.InOutQuad
 			}
 			NumberAnimation {
-				target: rightClaw; property: "x"; to: gameArea.x + gameArea.width
+				target: rightClaw; property: "x"; to: gameArea.width
 				duration: 1000; easing.type: Easing.InOutQuad
 			}
 		}
 	}
 
+	Rectangle {
+		color: "black"
+		height: windowHeight
+		width: windowWidth/2
+		anchors {
+			left: gameArea.right
+			top: parent.top
+		}
+	}
+
+	Rectangle {
+		color: "black"
+		height: windowHeight
+		width: windowWidth/2
+		anchors {
+			right: gameArea.left
+			top: parent.top
+		}
+	}
+
 	MenuCard {
 		id: mainMenu
-		anchors {left: parent.right; verticalCenter: parent.verticalCenter}
+		anchors.left: parent.right
 		Image {
 			id: monkeyLogo
 			source: "qrc:///bubbles/monkey"
@@ -300,30 +330,25 @@ Window {
 			spacing: windowHeight/24
 			ImageButton {
 				source: "qrc:///buttons/startNew"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
-				onClicked: { if(game.state === "Main Menu") game.state = "Main Level Menu"; else game.state = "Pause Level Menu" }
+				onClicked: {
+					if(game.state === "Main Menu") {
+						levelView.positionViewAtIndex(gLevelModel.unlockedCount(), GridView.End);
+						game.state = "Main Level Menu";
+					} else {
+						game.state = "Pause Level Menu";
+					}
+				}
 			}
 			ImageButton {
 				source: "qrc:///buttons/tutorial"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: { tutorial.pageNumber = 1; game.state = "Tutorial" }
 			}
 			ImageButton {
 				source: "qrc:///buttons/about"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: game.state = "About Menu"
 			}
 			ImageButton {
 				source: "qrc:///buttons/quit"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: Qt.quit()
 			}
 		}
@@ -331,7 +356,7 @@ Window {
 
 	MenuCard {
 		id: pauseMenu
-		anchors { left: parent.right; verticalCenter: parent.verticalCenter }
+		anchors.left: parent.right
 		Column {
 			anchors {
 				margins: windowHeight/32
@@ -342,33 +367,18 @@ Window {
 
 			ImageButton {
 				source: "qrc:///buttons/resume"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: game.state = "Running"
 			}
-
 			ImageButton {
 				source: "qrc:///buttons/restart"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: GameLogic.startNewGame(game.level)
 			}
-
 			ImageButton {
 				source: "qrc:///buttons/startNew"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: { if(game.state === "Main Menu") game.state = "Main Level Menu"; else game.state = "Pause Level Menu" }
 			}
-
 			ImageButton {
 				source: "qrc:///buttons/quit"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: Qt.quit()
 			}
 		}
@@ -376,7 +386,7 @@ Window {
 
 	MenuCard {
 		id: levelMenu
-		anchors { right: parent.left; verticalCenter: parent.verticalCenter }
+		anchors.right: parent.left
 
 		Rectangle {
 			id: levelContainer
@@ -394,11 +404,12 @@ Window {
 				id: levelView
 				anchors {
 					fill: parent
-					topMargin: levelContainer.border.width/2; bottomMargin: levelContainer.border.width/2
+					topMargin: levelContainer.border.width; bottomMargin: levelContainer.border.width
 					leftMargin: levelContainer.radius; rightMargin: levelContainer.radius
 				}
 				model: gLevelModel
-				cellWidth: width/4.1 // ensure 4 buttons on a row
+				property int  buttonsPerRow: Math.round(10*width/windowHeight)
+				cellWidth: width/(buttonsPerRow + 0.1) // ensure not much extra room to the right of buttons
 				cellHeight: cellWidth*1.3 // a bit extra margin between rows
 				clip: true
 				function startNew(pIndex) { GameLogic.startNewGame(pIndex) }
@@ -410,9 +421,7 @@ Window {
 			id: levelBackButton
 			source: "qrc:///buttons/mainMenu"
 			height: windowHeight*3/64
-			width: parent.width*15/16
 			anchors {
-				horizontalCenter: parent.horizontalCenter
 				top: levelContainer.bottom
 				margins: windowHeight/128
 			}
@@ -447,16 +456,10 @@ Window {
 			}
 			ImageButton {
 				source: "qrc:///buttons/restart"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: GameLogic.startNewGame(game.level)
 			}
 			ImageButton {
 				source: "qrc:///buttons/mainMenu"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: {GameLogic.clearAllBubbles(); game.state = "Main Menu"}
 			}
 		}
@@ -464,7 +467,7 @@ Window {
 
 	MenuCard {
 		id: nextLevelMenu
-		anchors {right: parent.left; verticalCenter: parent.verticalCenter}
+		anchors.right: parent.left
 		Column {
 			anchors {
 				margins: windowHeight/32
@@ -488,16 +491,10 @@ Window {
 			}
 			ImageButton {
 				source: "qrc:///buttons/nextLevel"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: GameLogic.startNewGame(game.level + 1)
 			}
 			ImageButton {
 				source: "qrc:///buttons/mainMenu"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: {GameLogic.clearAllBubbles(); game.state = "Main Menu"}
 			}
 		}
@@ -505,7 +502,7 @@ Window {
 
 	MenuCard {
 		id: aboutMenu
-		anchors {right: parent.left; verticalCenter: parent.verticalCenter}
+		anchors.right: parent.left
 		Column {
 			anchors {
 				margins: windowHeight/32
@@ -520,7 +517,6 @@ Window {
 				horizontalAlignment: Text.AlignHCenter
 				font.pixelSize: windowHeight/20
 			}
-
 			Text{
 				text:"Copyright Simon Persson 2012. Licensed under the GNU General Public License (GPL) version 2 or later.\n" +
 				     "Chimp icon by Jakub Steiner.\n" +
@@ -529,12 +525,8 @@ Window {
 				wrapMode: Text.Wrap
 				font.pixelSize: windowHeight/48
 			}
-
 			ImageButton {
 				source: "qrc:///buttons/mainMenu"
-				height: windowHeight/16
-				width: parent.width*15/16
-				anchors.horizontalCenter: parent.horizontalCenter
 				onClicked: { game.state = "Main Menu" }
 			}
 		}
@@ -543,7 +535,7 @@ Window {
 	MenuCard {
 		id: tutorial
 		property int pageNumber: 1
-		anchors {right: parent.left; verticalCenter: parent.verticalCenter}
+		anchors.right: parent.left
 
 		Column {
 			anchors {
@@ -559,7 +551,6 @@ Window {
 				height: windowHeight/2.5
 				width: height*sourceSize.width/sourceSize.height
 			}
-
 			Text{
 				text: Tutorial.texts[tutorial.pageNumber - 1]
 				width: parent.width
@@ -580,31 +571,27 @@ Window {
 				anchors.horizontalCenter: parent.horizontalCenter
 				ImageButton {
 					source: "qrc:///buttons/previous"
+					anchors.horizontalCenter: undefined
+					width: naturalWidth
 					opacity: tutorial.pageNumber != 1 ? 1 : 0.2
-					height: windowHeight/16
 					onClicked: if(tutorial.pageNumber > 1) tutorial.pageNumber--;
 				}
-
 				Text {
 					text: tutorial.pageNumber + "/" + Tutorial.texts.length
 					anchors.verticalCenter: parent.verticalCenter
 					verticalAlignment: Text.AlignVCenter
 					font.pixelSize: windowHeight/32
 				}
-
 				ImageButton {
 					source: "qrc:///buttons/next"
+					anchors.horizontalCenter: undefined
+					width: naturalWidth
 					opacity: tutorial.pageNumber != Tutorial.texts.length ? 1 : 0.2
-					height: windowHeight/16
 					onClicked: if(tutorial.pageNumber < Tutorial.texts.length) tutorial.pageNumber++;
 				}
 			}
-
 			ImageButton {
 				source: "qrc:///buttons/mainMenu"
-				anchors.horizontalCenter: parent.horizontalCenter
-				height: windowHeight/16
-				width: parent.width*15/16
 				onClicked: { game.state = "Main Menu" }
 			}
 		}

@@ -24,10 +24,11 @@ Item {
 	id: imageButton
 	signal clicked
 	property alias source: image.source
+	property real naturalWidth: height*image.sourceSize.width/image.sourceSize.height
 
-	height: 50
-	// width set to preserve aspect ratio
-	width: height*image.sourceSize.width/image.sourceSize.height
+	height: windowHeight/16
+	width: parent.width*15/16
+	anchors.horizontalCenter: parent.horizontalCenter
 	scale: mouseArea.pressed ? 0.9 : 1.0
 	Behavior on scale { NumberAnimation { duration: 50 } }
 
@@ -36,7 +37,6 @@ Item {
 		anchors.fill: imageButton
 		onClicked: imageButton.clicked()
 	}
-
 	Image {
 		id: image
 		height: imageButton.height

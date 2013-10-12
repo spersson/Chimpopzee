@@ -21,8 +21,8 @@
 import QtQuick 2.0
 
 Rectangle {
-	width: windowWidth*7/8
-	height: windowHeight*3/4
+	width: gameArea.width*7/8
+	height: windowHeight*13/16
 	radius: height/12
 	border.width: 4
 	border.color: "#534333"

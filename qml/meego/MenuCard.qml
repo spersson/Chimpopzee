@@ -21,14 +21,14 @@
 import QtQuick 1.1
 
 Rectangle {
-	width: windowWidth*7/8
-	height: windowHeight*3/4
+	width: gameArea.width*7/8
+	height: windowHeight*13/16
 	radius: height/12
-	border.width: 0.02*screen.dpi
+	border.width: 4
 	border.color: "#534333"
 	color: "#f9eec3"
 	anchors {
-		margins: 0.02*screen.dpi
+		margins: 4
 		verticalCenter: parent.verticalCenter
 	}
 }
