@@ -26,7 +26,7 @@
 #include "levelmodel.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
-	QGuiApplication app(argc, argv);
+	QGuiApplication lApplication(argc, argv);
 
 	QtQuick2ApplicationViewer viewer;
 
@@ -39,5 +39,5 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 	viewer.setMainQmlFile(QStringLiteral("qml/android/Game.qml"));
 	viewer.show();
 
-	return app.exec();
+	return lApplication.exec();
 }

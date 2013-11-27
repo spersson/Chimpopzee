@@ -369,7 +369,7 @@ Item {
 				source: "qrc:///buttons/startNew"
 				onClicked: {
 					if(game.state === "Main Menu") {
-						levelView.positionViewAtIndex(gLevelModel.unlockedCount(), GridView.End);
+						levelView.positionViewAtIndex(gLevelModel.completedLevelsCount(), GridView.End);
 						game.state = "Main Level Menu";
 					} else {
 						game.state = "Pause Level Menu";

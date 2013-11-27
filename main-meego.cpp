@@ -26,7 +26,7 @@
 #include "levelmodel.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
-	QScopedPointer<QApplication> app(createApplication(argc, argv));
+	QScopedPointer<QApplication> lApplication(createApplication(argc, argv));
 	QScopedPointer<QmlApplicationViewer> viewer(QmlApplicationViewer::create());
 
 	QVariantList lLevelList;
@@ -38,5 +38,5 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 	viewer->setMainQmlFile(QLatin1String("qml/meego/Game.qml"));
 	viewer->showExpanded();
 
-	return app->exec();
+	return lApplication->exec();
 }

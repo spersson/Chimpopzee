@@ -39,10 +39,10 @@ public:
 	virtual int rowCount(const QModelIndex &pParent) const;
 	virtual QVariant data(const QModelIndex &pIndex, int pRole) const;
 	virtual QHash<int, QByteArray> roleNames() const;
-	Q_INVOKABLE int unlockedCount();
+	Q_INVOKABLE int completedLevelsCount();
 
 public slots:
-	void unlock(int pLevel);
+	void registerCompleted(int pLevel);
 	bool recordHighscore(int pLevel, int pRemainingTime);
 
 private:

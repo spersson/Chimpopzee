@@ -314,7 +314,7 @@ function animateFallingBubbles() {
 		} else {
 			nextLevelText2.text += "well done!";
 		}
-		gLevelModel.unlock(game.level + 1);
+		gLevelModel.registerCompleted(game.level);
 		if(game.level === gLevels.length - 1) {
 			gameOverText1.text = "All levels completed!";
 			gameOverText2.text = nextLevelText2.text;

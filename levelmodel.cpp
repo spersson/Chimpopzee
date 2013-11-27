@@ -25,7 +25,7 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QSettings>
 
-#define UNLOCKED_AT_START 9
+#define COMPLETED_AT_START 9
 
 bool readComplicatedFile(QIODevice &pDevice, QSettings::SettingsMap &pMap) {
 	QBuffer lBuffer;
@@ -71,16 +71,16 @@ LevelModel::LevelModel(int pNumLevels, QObject *pParent) :
 	QSettings *lSettings = new QSettings(QLatin1String("Simon Persson"), QLatin1String("Chimpachump"));
 	QFileInfo lOldIniFile(lSettings->fileName());
 	if(lOldIniFile.exists()) {
-		int lUnlockedCount = lSettings->value(QLatin1String("unlockedLevels")).toInt();
+		int lCompletedCount = lSettings->value(QLatin1String("unlockedLevels")).toInt();
 		// version 1.0 did not unlock next level after last level, when levels are added in a later
 		// version, first new level is not immideately unlocked even if all previous levels have been passed.
-		if(lSettings->value(QString("bestTimes/%1").arg(lUnlockedCount), -1).toInt() > -1) {
-			lUnlockedCount++;
+		if(lSettings->value(QString("bestTimes/%1").arg(lCompletedCount), -1).toInt() > -1) {
+			lCompletedCount++;
 		}
-		mSettings->setValue(QLatin1String("unlockedLevels"), lUnlockedCount);
+		mSettings->setValue(QLatin1String("completedLevels"), lCompletedCount);
 		mSettings->beginGroup("bestTimes");
 		lSettings->beginGroup("bestTimes");
-		for(int i = 0; i < lUnlockedCount; ++i) {
+		for(int i = 0; i < lCompletedCount; ++i) {
 			QString lIndex = QString::number(i);
 			mSettings->setValue(lIndex, lSettings->value(lIndex, -1).toInt());
 		}
@@ -101,7 +101,7 @@ QVariant LevelModel::data(const QModelIndex &pIndex, int pRole) const {
 	case TimeRole:
 		return mSettings->value(QString("bestTimes/%1").arg(pIndex.row()), -1);
 	case LockedRole:
-		return pIndex.row() > mSettings->value(QLatin1String("unlockedLevels"), UNLOCKED_AT_START).toInt();
+		return pIndex.row() > mSettings->value(QLatin1String("completedLevels"), COMPLETED_AT_START).toInt();
 	default:
 		return QVariant();
 	}
@@ -114,13 +114,14 @@ QHash<int, QByteArray> LevelModel::roleNames() const {
 	return lRoles;
 }
 
-int LevelModel::unlockedCount() {
-	return mSettings->value(QLatin1String("unlockedLevels"), UNLOCKED_AT_START).toInt();
+int LevelModel::completedLevelsCount() {
+	return mSettings->value(QLatin1String("completedLevels"), COMPLETED_AT_START).toInt();
 }
 
-void LevelModel::unlock(int pLevel) {
-	if(pLevel > mSettings->value(QLatin1String("unlockedLevels"), UNLOCKED_AT_START).toInt()) {
-		mSettings->setValue(QLatin1String("unlockedLevels"), pLevel);
+// parameter pLevel is zero-based, it will be 3 when user just finished level 4.
+void LevelModel::registerCompleted(int pLevel) {
+	if(pLevel >= completedLevelsCount()) {
+		mSettings->setValue(QLatin1String("completedLevels"), pLevel + 1);
 		mSettings->sync();
 		emit dataChanged(index(pLevel), index(pLevel));
 	}
