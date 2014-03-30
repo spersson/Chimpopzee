@@ -11,6 +11,10 @@
         <file alias="next">next.png</file>
         <file alias="tutorial">tutorial.png</file>
         <file alias="previous">previous.png</file>
+        <file alias="cancel">cancel.png</file>
+        <file alias="highScores">highscores.png</file>
+        <file alias="submit">submit.png</file>
+        <file alias="refresh">refresh.png</file>
     </qresource>
     <qresource prefix="/bubbles">
         <file alias="highlight">highlight.svg</file>
@@ -41,6 +45,7 @@
         <file alias="twigLeft">twig-left.svg</file>
         <file alias="twigRight">twig-right.svg</file>
         <file alias="padlock">padlock.svg</file>
+        <file alias="fadedBackground">faded-background.svg</file>
     </qresource>
     <qresource prefix="/tutorial">
         <file alias="drag">drag.png</file>

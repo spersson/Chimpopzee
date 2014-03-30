@@ -1,0 +1,38 @@
+Name: harbour-chimpopzee
+Summary: Arcade-style game
+Version: 2.0
+Release: 1
+Group: Qt/Qt
+URL: http://example.org/
+License: GPL-2.0+
+Sources:
+- '%{name}-%{version}.tar.bz2'
+Description: |-
+  Simple game of arranging coloured bubbles to set monkeys free.
+Configure: none
+Builder: qtc5
+PkgConfigBR:
+- Qt5Multimedia
+- Qt5Svg
+- Qt5Xml
+- Qt5Quick
+- Qt5Qml
+- Qt5Core
+- sailfishapp >= 0.0.10
+Requires:
+- sailfishsilica-qt5 >= 0.10.9
+- qt5-qtsvg-plugin-imageformat-svg
+Files:
+- /usr/share/icons/hicolor/86x86/apps
+- /usr/share/applications
+- /usr/share/harbour-chimpopzee
+- /usr/bin
+- '%{_bindir}/%{name}'
+- '%{_bindir}'
+- '%{_datadir}/applications/%{name}.desktop'
+- '%{_datadir}/applications'
+- '%{_datadir}/icons/hicolor/86x86/apps/%{name}.png'
+- '%{_datadir}/icons/hicolor/86x86/apps'
+- '%{_datadir}/%{name}/qml'
+- '%{_datadir}/%{name}'
+PkgBR: []
