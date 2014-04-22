@@ -176,7 +176,11 @@ void LevelModel::postData(QString pClientName) {
 	QDataStream lDataStream(&lByteArray, QIODevice::WriteOnly);
 	lDataStream.setVersion(QDataStream::Qt_4_6);
 	lDataStream << (quint8) 1; // Version
-	lDataStream << mSettings->value("clientID", QByteArray("000000000000000000000000")).toByteArray();
+	QByteArray lClientId = mSettings->value("clientID").toByteArray();
+	if(lClientId.length() != 24) {
+		lClientId = QByteArray("000000000000000000000000");
+	}
+	lDataStream << lClientId;
 	lDataStream << pClientName.toUtf8();
 	int lCompletedLevels = completedLevelsCount();
 	lDataStream << (quint16)lCompletedLevels;
@@ -219,8 +223,10 @@ void LevelModel::completePosting() {
 	quint8 lErrorStatus;
 	lDataStream >> lVersion >> lClientId >> lErrorStatus;
 //	qDebug() << "version: " << lVersion << " client ID: " << lClientId;
-	mSettings->setValue("clientID", lClientId);
-	mSettings->sync();
+	if(lClientId.length() == 24) {
+		mSettings->setValue("clientID", lClientId);
+		mSettings->sync();
+	}
 	if(lErrorStatus != 0) {
 		QString lErrorMessage;
 		lDataStream >> lErrorMessage;
