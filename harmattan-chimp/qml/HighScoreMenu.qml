@@ -111,7 +111,8 @@ MenuCard {
 					ListView {
 						id: recordList
 						boundsBehavior: Flickable.StopAtBounds
-						height: contentItem.childrenRect.height
+						height: childrenRect.height
+						contentHeight: contentItem.childrenRect.height
 						model: LevelHighScoreModel {
 							level: index
 						}
