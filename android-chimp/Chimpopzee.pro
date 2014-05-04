@@ -9,22 +9,16 @@ HEADERS += \
     ../lib/highscoresmodel.h
 
 RESOURCES += \
-    ../resources/resources.qrc
+    ../resources/resources.qrc \
+    qml/qml.qrc
 
-folder_01.source = qml
-folder_01.target = ""
-DEPLOYMENTFOLDERS += folder_01
-
-include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
-qtcAddDeployment()
-
-QT += multimedia xml svg
+QT += qml quick multimedia xml svg
 
 OTHER_FILES += \
-    qml/tutorial.js \
-    qml/doublelogic.js \
-    qml/gamelogic.js \
-    android/AndroidManifest.xml \
-    android/src/org/qtproject/qt5/android/bindings/QtActivity.java
+    android/AndroidManifest.xml
+
+# Default rules for deployment.
+include(deployment.pri)
+
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

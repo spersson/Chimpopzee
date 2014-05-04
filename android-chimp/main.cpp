@@ -21,15 +21,16 @@
 #include <QtCore/QVariant>
 #include <QtGui/QGuiApplication>
 #include <QtQml/QtQml>
+#include <QtQuick/QQuickView>
 #include <QtNetwork/QNetworkAccessManager>
 
-#include "qtquick2applicationviewer.h"
 #include "../lib/levelmodel.h"
 #include "../lib/highscoresmodel.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
 	QGuiApplication *lApplication = new QGuiApplication(argc, argv);
-	QtQuick2ApplicationViewer *lView = new QtQuick2ApplicationViewer();
+	QQuickView *lView = new QQuickView;
+	lView->setResizeMode(QQuickView::SizeRootObjectToView);
 
 	QVariantList lLevelList;
 	createAllLevels(lLevelList);
@@ -48,8 +49,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 	qmlRegisterType<LevelHighScoresModel>("ChimpModels", 1, 0, "LevelHighScoreModel");
 	LevelHighScoresModel::registerOtherModels(lLevelModel, lHighScoresModel);
 
-
-	lView->setMainQmlFile(QStringLiteral("qml/Game.qml"));
+	lView->setSource(QStringLiteral("qrc:///qml/Game.qml"));
 	lView->showFullScreen();
 
 	return lApplication->exec();

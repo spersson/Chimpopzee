@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>AboutMenu.qml</file>
+        <file>BottomBar.qml</file>
+        <file>Bubble.qml</file>
+        <file>Claws.qml</file>
+        <file>DoubleBubble.qml</file>
+        <file>doublelogic.js</file>
+        <file>Game.qml</file>
+        <file>gamelogic.js</file>
+        <file>GameOverMenu.qml</file>
+        <file>HighScoreMenu.qml</file>
+        <file>ImageButton.qml</file>
+        <file>LevelMenu.qml</file>
+        <file>MainMenu.qml</file>
+        <file>MenuCard.qml</file>
+        <file>MenuCardLoader.qml</file>
+        <file>NextLevelMenu.qml</file>
+        <file>Particles.qml</file>
+        <file>PauseMenu.qml</file>
+        <file>Sounds.qml</file>
+        <file>SubmissionMenu.qml</file>
+        <file>tutorial.js</file>
+        <file>TutorialMenu.qml</file>
+    </qresource>
+</RCC>
