@@ -2,13 +2,11 @@
 SOURCES += \
     main.cpp \
     ../lib/levelmodel.cpp \
-    ../lib/highscoresmodel.cpp \
-#    androidsoundeffect.cpp
+    ../lib/highscoresmodel.cpp
 
 HEADERS += \
     ../lib/levelmodel.h \
-    ../lib/highscoresmodel.h \
-#    androidsoundeffect.h
+    ../lib/highscoresmodel.h
 
 RESOURCES += \
     ../resources/resources.qrc
@@ -30,6 +28,3 @@ OTHER_FILES += \
     android/src/org/qtproject/qt5/android/bindings/QtActivity.java
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-
-#LIBS += -lOpenSLES
-#QT += androidextras

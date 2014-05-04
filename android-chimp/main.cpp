@@ -26,7 +26,6 @@
 #include "qtquick2applicationviewer.h"
 #include "../lib/levelmodel.h"
 #include "../lib/highscoresmodel.h"
-//#include "androidsoundeffect.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
 	QGuiApplication *lApplication = new QGuiApplication(argc, argv);
@@ -49,7 +48,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 	qmlRegisterType<LevelHighScoresModel>("ChimpModels", 1, 0, "LevelHighScoreModel");
 	LevelHighScoresModel::registerOtherModels(lLevelModel, lHighScoresModel);
 
-//	qmlRegisterType<AndroidSoundEffect>("ChimpAudio", 1, 0, "SoundEffect");
 
 	lView->setMainQmlFile(QStringLiteral("qml/Game.qml"));
 	lView->showFullScreen();

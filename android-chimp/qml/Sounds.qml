@@ -20,15 +20,24 @@
 
 import QtQuick 2.0
 import QtMultimedia 5.0
-//import ChimpAudio 1.0
 
 Item {
 	SoundEffect {
 		id: plopper
 		source: "qrc:///sounds/plopp"
 	}
+	SoundEffect {
+		id: plopper2
+		source: "qrc:///sounds/plopp"
+	}
 
 	function playPlopp() {
-		plopper.play();
+		if(!plopper.playing) {
+			plopper.play();
+		} else if(!plopper2.playing){
+			plopper2.play();
+		} else {
+			plopper.play();
+		}
 	}
 }
