@@ -1,3 +1,8 @@
+chimpopzee (2.0.1) unstable; urgency=low
+  * Bug fix for highscore display and send to server function.
+
+ -- Simon Persson <simonpersson1@gmail.com>  Tue, 22 Apr 2014 16:34:13 +0800
+
 chimpopzee (2.0.0) unstable; urgency=low
   * Added highscore upload feature, polish of UI, new levels.
 

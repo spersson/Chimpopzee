@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 import QtQuick 2.0
-import ChimpModels 1.0
+import harbour.chimpopzee.ChimpModels 1.0
 
 MenuCard {
 	id: menuCard

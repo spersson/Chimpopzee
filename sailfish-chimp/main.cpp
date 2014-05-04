@@ -47,7 +47,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 	QObject::connect(lLevelModel, SIGNAL(postingSucceded()), lHighScoresModel, SLOT(readScoresFromFile()));
 	QObject::connect(lView->engine(), SIGNAL(quit()), lApplication, SLOT(quit()));
 
-	qmlRegisterType<LevelHighScoresModel>("ChimpModels", 1, 0, "LevelHighScoreModel");
+	qmlRegisterType<LevelHighScoresModel>("harbour.chimpopzee.ChimpModels", 1, 0, "LevelHighScoreModel");
 	LevelHighScoresModel::registerOtherModels(lLevelModel, lHighScoresModel);
 
 	Platform lPlatform(lView);

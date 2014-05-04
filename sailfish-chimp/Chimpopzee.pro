@@ -22,7 +22,6 @@ OTHER_FILES += \
 	 qml/tutorial.js \
 	 qml/doublelogic.js \
 	 qml/gamelogic.js \
-	 rpm/harbour-chimpopzee.spec \
 	 rpm/Chimpopzee.yaml \
 	 harbour-chimpopzee.desktop
 
