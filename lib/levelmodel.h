@@ -31,6 +31,7 @@ class QSettings;
 class LevelModel : public QAbstractListModel
 {
 	Q_OBJECT
+	Q_PROPERTY(int totalTime READ totalTime NOTIFY totalTimeChanged)
 public:
 	enum LevelRoles {
 		TimeRole = Qt::UserRole + 1,
@@ -42,12 +43,13 @@ public:
 	virtual int rowCount(const QModelIndex &pParent) const;
 	virtual QVariant data(const QModelIndex &pIndex, int pRole) const;
 	virtual QHash<int, QByteArray> roleNames() const;
-	Q_INVOKABLE int completedLevelsCount();
-	Q_INVOKABLE QString clientName();
-	Q_INVOKABLE int totalTime();
+	Q_INVOKABLE int completedLevelsCount() const;
+	Q_INVOKABLE QString clientName() const;
+	Q_INVOKABLE int totalTime() const;
 	int levelRecord(int pLevel);
 
 signals:
+	void totalTimeChanged();
 	void postingFailed(QString pMessage);
 	void postingSucceded();
 

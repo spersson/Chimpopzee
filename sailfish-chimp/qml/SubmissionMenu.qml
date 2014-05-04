@@ -64,7 +64,7 @@ MenuCard {
 				}
 			}
 			Text {
-				text: "Your total time:\n" + gLevelModel.totalTime() + " seconds";
+				text: "Your total time:\n" + gLevelModel.totalTime + " seconds";
 				anchors.horizontalCenter: parent.horizontalCenter
 				width: parent.width
 				horizontalAlignment: Text.AlignHCenter

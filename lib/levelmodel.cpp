@@ -119,15 +119,15 @@ QHash<int, QByteArray> LevelModel::roleNames() const {
 	return lRoles;
 }
 
-int LevelModel::completedLevelsCount() {
+int LevelModel::completedLevelsCount() const {
 	return mSettings->value(QLatin1String("completedLevels"), COMPLETED_AT_START).toInt();
 }
 
-QString LevelModel::clientName() {
+QString LevelModel::clientName() const {
 	return mSettings->value("clientName", "").toString();
 }
 
-int LevelModel::totalTime() {
+int LevelModel::totalTime() const {
 	int lCompletedLevels = completedLevelsCount();
 	int lTotalTime = 0;
 	mSettings->beginGroup("bestTimes");
@@ -160,6 +160,7 @@ bool LevelModel::recordHighscore(int pLevel, int pRemainingTime) {
 		mSettings->setValue(lKey, pRemainingTime);
 		mSettings->sync();
 		emit dataChanged(index(pLevel), index(pLevel));
+		emit totalTimeChanged();
 		return true;
 	} else {
 		return false;
