@@ -53,8 +53,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 	Platform lPlatform(lView);
 	lView->rootContext()->setContextProperty(QStringLiteral("gPlatform"), &lPlatform);
 
-
-	lView->setSource(SailfishApp::pathTo(QStringLiteral("qml/Root.qml")));
+	lView->setSource(QStringLiteral("qrc:///qml/Root.qml"));
 	lView->showFullScreen();
 
 	return lApplication->exec();
