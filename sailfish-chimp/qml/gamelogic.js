@@ -518,18 +518,17 @@ function clearAllBubbles() {
 }
 
 function createNewGameGrid(pMonkeyCount, pEmptyRows) {
-	var lPossibleRowCount = gameArea.gameRowCount - pEmptyRows;
-	var lDestinations = new Array(lPossibleRowCount * gameArea.gameColumnCount)
-	for(var r = 0; r < lPossibleRowCount; ++r) {
-		for(var c = 0; c < gameArea.gameColumnCount; ++c) {
-			lDestinations[r*gameArea.gameColumnCount + c] = {row: r + pEmptyRows, col: c};
-		}
-	}
-
 	gGrid = new Grid(gameArea.gameColumnCount, gameArea.gameRowCount);
-	for(var i = 0; i < pMonkeyCount; ++i) {
-		var lDest = lDestinations.splice(Math.floor(Math.random()*lDestinations.length), 1);
-		createNewBubble(lDest[0].row, lDest[0].col, true, true, 0, gColors[Math.floor(Math.random() * gLevels[game.level].colorCount)], true);
+	var lMonkeysRemaining = pMonkeyCount;
+	var lPossibleLocationCount = (gameArea.gameRowCount - pEmptyRows) * gameArea.gameColumnCount;
+	for(var r = pEmptyRows; r < gameArea.gameRowCount && lMonkeysRemaining > 0; ++r) {
+		for(var c = 0; c < gameArea.gameColumnCount && lMonkeysRemaining > 0; ++c) {
+			if(Math.random() < lMonkeysRemaining / lPossibleLocationCount) {
+				createNewBubble(r, c, true, true, 0, gColors[Math.floor(Math.random() * gLevels[game.level].colorCount)], true);
+				lMonkeysRemaining--;
+			}
+			lPossibleLocationCount--;
+		}
 	}
 	return true;
 }
