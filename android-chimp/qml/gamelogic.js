@@ -364,7 +364,7 @@ function animateFallingBubbles() {
 			} else {
 				gFallingDouble.x = lDragDestinationX;
 			}
-				gFallingDouble.column = Math.round(gFallingDouble.x/bubbleSize);
+			gFallingDouble.column = Math.round(gFallingDouble.x/bubbleSize);
 		}
 	} else if(gameArea.state === "Fall Pop") {
 		var lSomethingLanded = false;
