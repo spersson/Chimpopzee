@@ -115,7 +115,10 @@ Item {
 
 	Component {
 		id: _monkeyComponent
-		Image { source: "qrc:///bubbles/monkey" }
+		Image {
+			source: "qrc:///bubbles/monkey"
+			sourceSize.height: height
+		}
 	}
 
 	Loader {
@@ -128,12 +131,14 @@ Item {
 		id: _bubbleImage
 		source: "qrc:///bubbles/" + color + (single ? "s" : "d")
 		width: parent.width; height: parent.height
+		sourceSize.height: parent.height
 	}
 
 	Image {
 		id: _highlightImage
 		source: "qrc:///bubbles/highlight"
 		width: parent.width; height: parent.height
+		sourceSize.height: parent.height
 	}
 
 	Rectangle {

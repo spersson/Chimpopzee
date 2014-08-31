@@ -25,16 +25,16 @@ Item {
 		id: leftClaw
 		source: "qrc:///images/twigLeft"
 		x: -width; y: gameArea.bubbleSize
-		width: height*sourceSize.width/sourceSize.height; height: gameArea.bubbleSize
-		smooth: true
+		width: implicitWidth*height/implicitHeight; height: gameArea.bubbleSize
+		sourceSize.height: height
 	}
 
 	Image {
 		id: rightClaw
 		source: "qrc:///images/twigRight"
 		x:	gameArea.width; y: gameArea.bubbleSize
-		width: height*sourceSize.width/sourceSize.height; height: gameArea.bubbleSize
-		smooth: true
+		width: implicitWidth*height/implicitHeight; height: gameArea.bubbleSize
+		sourceSize.height: height
 	}
 
 	SequentialAnimation {

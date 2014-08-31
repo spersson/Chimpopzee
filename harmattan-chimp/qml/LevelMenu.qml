@@ -43,8 +43,8 @@ MenuCard {
 			width: parent.width
 			spacing: -20
 			Image {
-				width: parent.width
-				height: 20
+				width: parent.width; height: 20
+				sourceSize.height: height
 				source: "qrc:///images/fadedBackground"
 				z: 1
 			}
@@ -60,8 +60,8 @@ MenuCard {
 				delegate: levelButton
 			}
 			Image {
-				width: parent.width
-				height: 20
+				width: parent.width; height: 20
+				sourceSize.height: height
 				source: "qrc:///images/fadedBackground"
 				rotation: 180
 				z: 1
@@ -138,6 +138,7 @@ MenuCard {
 				visible: model.locked
 				source: "qrc:///images/padlock"
 				height: buttonRect.height*2/3; width: height
+				sourceSize.height: height
 				smooth: true
 				anchors.top: buttonRect.verticalCenter
 				anchors.left: buttonRect.horizontalCenter

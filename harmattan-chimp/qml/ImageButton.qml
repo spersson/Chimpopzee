@@ -24,7 +24,7 @@ Item {
 	id: imageButton
 	signal clicked
 	property alias source: image.source
-	property real naturalWidth: height*image.sourceSize.width/image.sourceSize.height
+	property real naturalWidth: image.implicitWidth*height/image.implicitHeight
 
 	height: windowHeight/16
 	width: parent.width*15/16
@@ -41,7 +41,8 @@ Item {
 		id: image
 		height: imageButton.height
 		// width set to preserve aspect ratio
-		width: height*sourceSize.width/sourceSize.height
+		width: implicitWidth*imageButton.height/implicitHeight
+		sourceSize.height: height
 		anchors.centerIn: parent
 		smooth: true
 	}
