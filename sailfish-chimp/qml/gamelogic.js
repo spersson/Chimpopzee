@@ -153,26 +153,26 @@ function onMouseRelease(mouseEvent) {
 
 	var lUnitY = gFallingDouble.y/gameArea.bubbleSize;
 
-	if(gFallingDouble.leftRow === 0 || gFallingDouble.rightRow ===0) {
-		if(gFallingDouble.leftColumn === 0) { // double in left column
+	if(gFallingDouble.leftBubble.row === 0 || gFallingDouble.rightBubble.row ===0) {
+		if(gFallingDouble.leftBubble.column === 0) { // double in left column
 			if(lWantsCCW) {
 				if(gFallingDouble.column < gGrid.width - 1 &&
-					!isMostlyOccupied(gFallingDouble.column + 1, lUnitY + 1)) {
+				   !isMostlyOccupied(gFallingDouble.column + 1, lUnitY + 1)) {
 					gFallingDouble.rotateCounterClockwise();
 				} else if(gFallingDouble.column > 0 &&
-							 !isBothRowsOccupied(gFallingDouble.column - 1, lUnitY + 1) &&
-							 !isMostlyOccupied(gFallingDouble.column - 1, lUnitY)) {
+				          !isBothRowsOccupied(gFallingDouble.column - 1, lUnitY + 1) &&
+				          !isMostlyOccupied(gFallingDouble.column - 1, lUnitY)) {
 					gFallingDouble.x -= gameArea.bubbleSize;
 					gFallingDouble.column -= 1;
 					gFallingDouble.rotateCounterClockwise();
 				}
 			} else {
 				if(gFallingDouble.column < gGrid.width - 1 &&
-					!isBothRowsOccupied(gFallingDouble.column + 1, lUnitY + 1) &&
-					!isMostlyOccupied(gFallingDouble.column + 1, lUnitY)) {
+				   !isBothRowsOccupied(gFallingDouble.column + 1, lUnitY + 1) &&
+				   !isMostlyOccupied(gFallingDouble.column + 1, lUnitY)) {
 					gFallingDouble.rotateClockwise();
 				} else if(gFallingDouble.column > 0 &&
-							 !isMostlyOccupied(gFallingDouble.column - 1, lUnitY + 1)) {
+				          !isMostlyOccupied(gFallingDouble.column - 1, lUnitY + 1)) {
 					gFallingDouble.x -= gameArea.bubbleSize;
 					gFallingDouble.column -= 1;
 					gFallingDouble.rotateClockwise();
@@ -181,22 +181,22 @@ function onMouseRelease(mouseEvent) {
 		} else { //double in right column
 			if(lWantsCCW) {
 				if(gFallingDouble.column >= 0 &&
-					!isBothRowsOccupied(gFallingDouble.column, lUnitY + 1) &&
-					!isMostlyOccupied(gFallingDouble.column, lUnitY)) {
+				   !isBothRowsOccupied(gFallingDouble.column, lUnitY + 1) &&
+				   !isMostlyOccupied(gFallingDouble.column, lUnitY)) {
 					gFallingDouble.rotateCounterClockwise();
 				} else if(gFallingDouble.column < gGrid.width - 2 &&
-							 !isMostlyOccupied(gFallingDouble.column + 2, lUnitY + 1)) {
+				          !isMostlyOccupied(gFallingDouble.column + 2, lUnitY + 1)) {
 					gFallingDouble.x += gameArea.bubbleSize;
 					gFallingDouble.column += 1;
 					gFallingDouble.rotateCounterClockwise();
 				}
 			} else {
 				if(gFallingDouble.column >= 0 &&
-					!isMostlyOccupied(gFallingDouble.column, lUnitY + 1)) {
+				   !isMostlyOccupied(gFallingDouble.column, lUnitY + 1)) {
 					gFallingDouble.rotateClockwise();
 				} else if(gFallingDouble.column < gGrid.width - 2 &&
-							 !isBothRowsOccupied(gFallingDouble.column + 2, lUnitY + 1) &&
-							 !isMostlyOccupied(gFallingDouble.column + 2, lUnitY)) {
+				          !isBothRowsOccupied(gFallingDouble.column + 2, lUnitY + 1) &&
+				          !isMostlyOccupied(gFallingDouble.column + 2, lUnitY)) {
 					gFallingDouble.x += gameArea.bubbleSize;
 					gFallingDouble.column += 1;
 					gFallingDouble.rotateClockwise();
@@ -206,12 +206,12 @@ function onMouseRelease(mouseEvent) {
 	} else { // double is horizontal
 		if(lWantsCCW) {
 			if(!isBothRowsOccupied(gFallingDouble.column, lUnitY) &&
-				!isMostlyOccupied(gFallingDouble.column + 1, lUnitY)) {
+			   !isMostlyOccupied(gFallingDouble.column + 1, lUnitY)) {
 				gFallingDouble.rotateCounterClockwise();
 			}
 		} else {
 			if(!isBothRowsOccupied(gFallingDouble.column + 1, lUnitY) &&
-				!isMostlyOccupied(gFallingDouble.column, lUnitY)) {
+			   !isMostlyOccupied(gFallingDouble.column, lUnitY)) {
 				gFallingDouble.rotateClockwise();
 			}
 		}
@@ -229,15 +229,15 @@ function findMinX() {
 		return 0;
 	}
 	var bubbleSize = gameArea.bubbleSize;
-	var leftX = gFallingDouble.x/bubbleSize + gFallingDouble.leftColumn
-	var leftY = gFallingDouble.y/bubbleSize + gFallingDouble.leftRow
-	var rightX = gFallingDouble.x/bubbleSize + gFallingDouble.rightColumn
-	var rightY = gFallingDouble.y/bubbleSize + gFallingDouble.rightRow
+	var leftX = gFallingDouble.x/bubbleSize + gFallingDouble.leftBubble.column
+	var leftY = gFallingDouble.y/bubbleSize + gFallingDouble.leftBubble.row
+	var rightX = gFallingDouble.x/bubbleSize + gFallingDouble.rightBubble.column
+	var rightY = gFallingDouble.y/bubbleSize + gFallingDouble.rightBubble.row
 
-	var lMinX = findMinXForRow(leftX, leftY, false) - gFallingDouble.leftColumn;
-	lMinX = Math.max(lMinX, findMinXForRow(leftX, leftY, true) - gFallingDouble.leftColumn);
-	lMinX = Math.max(lMinX, findMinXForRow(rightX, rightY, false) - gFallingDouble.rightColumn);
-	lMinX = Math.max(lMinX, findMinXForRow(rightX, rightY, true) - gFallingDouble.rightColumn);
+	var lMinX = findMinXForRow(leftX, leftY, false) - gFallingDouble.leftBubble.column;
+	lMinX = Math.max(lMinX, findMinXForRow(leftX, leftY, true) - gFallingDouble.leftBubble.column);
+	lMinX = Math.max(lMinX, findMinXForRow(rightX, rightY, false) - gFallingDouble.rightBubble.column);
+	lMinX = Math.max(lMinX, findMinXForRow(rightX, rightY, true) - gFallingDouble.rightBubble.column);
 	return lMinX*gameArea.bubbleSize;
 }
 
@@ -252,15 +252,15 @@ function findMaxX() {
 		return gGrid.width - 1;
 	}
 	var bubbleSize = gameArea.bubbleSize;
-	var leftX = gFallingDouble.x/bubbleSize + gFallingDouble.leftColumn
-	var leftY = gFallingDouble.y/bubbleSize + gFallingDouble.leftRow
-	var rightX = gFallingDouble.x/bubbleSize + gFallingDouble.rightColumn
-	var rightY = gFallingDouble.y/bubbleSize + gFallingDouble.rightRow
+	var leftX = gFallingDouble.x/bubbleSize + gFallingDouble.leftBubble.column
+	var leftY = gFallingDouble.y/bubbleSize + gFallingDouble.leftBubble.row
+	var rightX = gFallingDouble.x/bubbleSize + gFallingDouble.rightBubble.column
+	var rightY = gFallingDouble.y/bubbleSize + gFallingDouble.rightBubble.row
 
-	var lMaxX = findMaxXForRow(leftX, leftY, false) - gFallingDouble.leftColumn;
-	lMaxX = Math.min(lMaxX, findMaxXForRow(leftX, leftY, true) - gFallingDouble.leftColumn);
-	lMaxX = Math.min(lMaxX, findMaxXForRow(rightX, rightY, false) - gFallingDouble.rightColumn);
-	lMaxX = Math.min(lMaxX, findMaxXForRow(rightX, rightY, true) - gFallingDouble.rightColumn);
+	var lMaxX = findMaxXForRow(leftX, leftY, false) - gFallingDouble.leftBubble.column;
+	lMaxX = Math.min(lMaxX, findMaxXForRow(leftX, leftY, true) - gFallingDouble.leftBubble.column);
+	lMaxX = Math.min(lMaxX, findMaxXForRow(rightX, rightY, false) - gFallingDouble.rightBubble.column);
+	lMaxX = Math.min(lMaxX, findMaxXForRow(rightX, rightY, true) - gFallingDouble.rightBubble.column);
 	return lMaxX*gameArea.bubbleSize;
 }
 
@@ -276,13 +276,13 @@ function shouldStopFalling(pColumn, pY, pSingle, pRotation) {
 		switch(pRotation) {
 		case 0:
 			return Boolean(gGrid.valueAt(lNextRow, pColumn)) ||
-					 Boolean(gGrid.valueAt(lNextRow, pColumn + 1));
+			       Boolean(gGrid.valueAt(lNextRow, pColumn + 1));
 		case 90:
 			return lNextRow + 1 === gGrid.height ||
-					 Boolean(gGrid.valueAt(lNextRow + 1, pColumn));
+			       Boolean(gGrid.valueAt(lNextRow + 1, pColumn));
 		case 180:
 			return Boolean(gGrid.valueAt(lNextRow, pColumn)) ||
-					 Boolean(gGrid.valueAt(lNextRow, pColumn - 1));
+			       Boolean(gGrid.valueAt(lNextRow, pColumn - 1));
 		}
 	}
 }
@@ -337,8 +337,8 @@ function animateFallingBubbles() {
 		// check for downward stop before moving sideways, if dragging is active it can move double far away sideways to
 		// avoid having the double on top of a bubble (collision avoidance), so we need to be determine if we're
 		// landing on a bubble first, otherwise we will "slide" down on the side of it.
-		if(shouldStopFalling(gFallingDouble.column + gFallingDouble.leftColumn,
-									gFallingDouble.y + gFallingDouble.leftRow*bubbleSize,
+		if(shouldStopFalling(gFallingDouble.column + gFallingDouble.leftBubble.column,
+									gFallingDouble.y + gFallingDouble.leftBubble.row*bubbleSize,
 									false, gFallingDouble.angle)) {
 			if(gFallingDouble.state === "Dragging") {
 					 gFallingDouble.x = gFallingDouble.column * bubbleSize;
@@ -421,14 +421,14 @@ function onDoubleLanding() {
 	var lRow = Math.floor(gFallingDouble.y/gameArea.bubbleSize);
 	var lCol = gFallingDouble.column;
 
-	createNewBubble(lRow + gFallingDouble.leftRow,
-						 lCol + gFallingDouble.leftColumn,
-						 false, false, gFallingDouble.angle,
-						 gFallingDouble.leftBubble.color, false);
-	createNewBubble(lRow + gFallingDouble.rightRow,
-						 lCol + gFallingDouble.rightColumn,
-						 false, false, (gFallingDouble.angle + 180) % 360,
-						 gFallingDouble.rightBubble.color, false);
+	createNewBubble(lRow + gFallingDouble.leftBubble.row,
+	                lCol + gFallingDouble.leftBubble.column,
+	                false, false, gFallingDouble.angle,
+	                gFallingDouble.leftBubble.color, false);
+	createNewBubble(lRow + gFallingDouble.rightBubble.row,
+	                lCol + gFallingDouble.rightBubble.column,
+	                false, false, (gFallingDouble.angle + 180) % 360,
+	                gFallingDouble.rightBubble.color, false);
 	killKillKill(gFallingDouble);
 	gFallingDouble = null;
 	gBlockCounter++;

@@ -27,7 +27,7 @@ Item {
 	property int cRotateDuration: 120
 	property int column
 
-	property var leftBubble: Bubble {
+	property Bubble leftBubble: Bubble {
 		bubbleRotation: angle
 		row: 1; y: gameArea.bubbleSize
 		column: 0; x: 0
@@ -37,7 +37,7 @@ Item {
 			}
 		}
 	}
-	property var rightBubble: Bubble {
+	property Bubble rightBubble: Bubble {
 		bubbleRotation: (angle + 180) % 360
 		row: 1; y: gameArea.bubbleSize
 		column: 1; x: gameArea.bubbleSize
@@ -48,11 +48,11 @@ Item {
 		}
 	}
 	children: [leftBubble, rightBubble]
-	property var bringInLeft: NumberAnimation {
+	property NumberAnimation bringInLeft: NumberAnimation {
 		target: leftBubble; property: "x"; to: 0
 		duration: 1000; easing.type: Easing.InOutQuad
 	}
-	property var bringInRight: NumberAnimation {
+	property NumberAnimation bringInRight: NumberAnimation {
 		target: rightBubble; property: "x"; to: gameArea.bubbleSize
 		duration: 1000; easing.type: Easing.InOutQuad
 	}
